@@ -34,10 +34,18 @@ module Pipes
 
     # Quietly fail the pipe. The error will be passed to the error_collector
     # and stored in the :base errors collection.
-    #
-    ## @param error [String]
     def halt(error = 'Execution stopped')
+      @halted = true
       add_errors(base: error)
+    end
+
+    # This method is added to maintain backwards compatibility - previous
+    # versions implemented a single @error instance variable of String for error
+    # storage.
+    #
+    # @return [String]
+    def error
+      errors[:base]&.last
     end
 
     # Explicitly fail the pipe.
